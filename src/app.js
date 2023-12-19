@@ -3,7 +3,7 @@ import {PORT} from "./config.js"
 
 const app = express()
 
-app.get("", (req,res)=>{
+app.get("/", (req,res)=>{
 	res.send("welcome XD")
 })
 
