@@ -13,7 +13,7 @@ const twitchClient = new tmi.Client({
     secure: true,
     reconnect: true,
   },
-  channels: ['renrize'], // Reemplaza con tu nombre de canal
+  channels: ['hanncitaa'], // Reemplaza con tu nombre de canal
 });
 
 // Crear un servidor HTTP
