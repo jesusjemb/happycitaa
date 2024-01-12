@@ -28,35 +28,6 @@ wss.on('connection', (ws) => {
 
   let previousMessage = '';
 
-  // Manejar mensajes del chat y enviarlos a través de WebSocket
-  twitchClient.on('message', (channel, userstate, message, self) => {
-    if (self) return; // Ignorar mensajes propios
-
-    const chatMessage = `${userstate.username}: ${message}`;
-    
-    // Verificar si el mensaje es igual al anterior
-    if (chatMessage !== previousMessage) {
-      console.log(chatMessage);
-
-      // Enviar el mensaje a través de WebSocket a todos los clientes conectados
-      wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          try {
-            client.send(chatMessage);
-            console.log('Mensaje enviado al WebSocket:', chatMessage);
-          } catch (error) {
-            console.error('Error al enviar mensaje al WebSocket:', error);
-          }
-        }
-      });
-
-      // Actualizar el mensaje anterior
-      previousMessage = chatMessage;
-    }
-  });
-
-
-
   // Manejar errores en la conexión WebSocket
   ws.on('error', (error) => {
     console.error('Error en la conexión WebSocket:', error);
@@ -67,6 +38,33 @@ wss.on('connection', (ws) => {
     console.log(`Mensaje recibido desde el front-end: ${message}`);
     // Puedes realizar acciones adicionales aquí según tus necesidades
   });
+});
+
+// Manejar mensajes del chat y enviarlos a través de WebSocket
+twitchClient.on('message', (channel, userstate, message, self) => {
+  if (self) return; // Ignorar mensajes propios
+
+  const chatMessage = `${userstate.username}: ${message}`;
+
+  // Verificar si el mensaje es igual al anterior
+  if (chatMessage !== previousMessage) {
+    console.log(chatMessage);
+
+    // Enviar el mensaje a través de WebSocket a todos los clientes conectados
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        try {
+          client.send(chatMessage);
+          console.log('Mensaje enviado al WebSocket:', chatMessage);
+        } catch (error) {
+          console.error('Error al enviar mensaje al WebSocket:', error);
+        }
+      }
+    });
+
+    // Actualizar el mensaje anterior
+    previousMessage = chatMessage;
+  }
 });
 
 // Manejar errores en la conexión del cliente de Twitch
