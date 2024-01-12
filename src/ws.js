@@ -49,7 +49,7 @@ twitchClient.on('message', (channel, userstate, message, self) => {
     if (client.readyState === WebSocket.OPEN) {
       try {
         client.send(chatMessage);
-        console.log('Mensaje enviado al WebSocket:', chatMessage);
+       // console.log('Mensaje enviado al WebSocket:', chatMessage);
       } catch (error) {
         console.error('Error al enviar mensaje al WebSocket:', error);
       }
