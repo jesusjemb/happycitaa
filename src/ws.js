@@ -26,8 +26,6 @@ const wss = new WebSocket.Server({ server });
 wss.on('connection', (ws) => {
   console.log('Conexión WebSocket establecida');
 
-  let previousMessage = '';
-
   // Manejar errores en la conexión WebSocket
   ws.on('error', (error) => {
     console.error('Error en la conexión WebSocket:', error);
@@ -46,25 +44,17 @@ twitchClient.on('message', (channel, userstate, message, self) => {
 
   const chatMessage = `${userstate.username}: ${message}`;
 
-  // Verificar si el mensaje es igual al anterior
-  if (chatMessage !== previousMessage) {
-    console.log(chatMessage);
-
-    // Enviar el mensaje a través de WebSocket a todos los clientes conectados
-    wss.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        try {
-          client.send(chatMessage);
-          console.log('Mensaje enviado al WebSocket:', chatMessage);
-        } catch (error) {
-          console.error('Error al enviar mensaje al WebSocket:', error);
-        }
+  // Enviar el mensaje a través de WebSocket a todos los clientes conectados
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      try {
+        client.send(chatMessage);
+        console.log('Mensaje enviado al WebSocket:', chatMessage);
+      } catch (error) {
+        console.error('Error al enviar mensaje al WebSocket:', error);
       }
-    });
-
-    // Actualizar el mensaje anterior
-    previousMessage = chatMessage;
-  }
+    }
+  });
 });
 
 // Manejar errores en la conexión del cliente de Twitch
