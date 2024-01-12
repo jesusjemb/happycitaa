@@ -54,7 +54,7 @@ wss.on('connection', (ws) => {
       previousMessage = chatMessage;
     }
   });
-});
+
 
 
   // Manejar errores en la conexión WebSocket
